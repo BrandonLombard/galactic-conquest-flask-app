@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- <h1 align="center">Notes</h1>
+<ul class="list-group list-group-flush" id="notes">
+    {% for note in user.notes %}
+        <li class="list-group-item">
+            {{ note.data }}
+            <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+                <span aria-hidden="'true">&times;</span>
+            </button>
+        </li>
+    {% endfor %}
+</ul>
+<form method="POST">
+    <textarea name="note" id="note" class="form-control"></textarea>
+    <br>
+    <div align="center">
+        <button type="submit" class="btn btn-primary">Add Note</button>
+    </div> -->
+    <div id="container">
+        <div class="left-column column-styling column-position">
+            <div class="round-white-box">
+                <div id="userimage">
+                    <img src="../static/images/game-assets/{{user.character}}.png" class="game-character">
+                    <div id="username">
+                        {{user.character}}
+                    </div>
+                </div>
+                <div id="rank"> 
+                {% if user.exp_points >= 1000 %}
+                    <img src="../static/images/game-assets/rank10.png" title="General" />
+                {% elif user.exp_points >= 900 %}
+                    <img src="../static/images/game-assets/rank9.png" title="Colonel" />
+                {% elif user.exp_points >= 800 %}
+                    <img src="../static/images/game-assets/rank8.png" title="Major" />
+                {% elif user.exp_points >= 700 %}
+                    <img src="../static/images/game-assets/rank7.png" title="Lieutenant" />
+                {% elif user.exp_points >= 600 %}
+                    <img src="../static/images/game-assets/rank6.png" title="Sergeant Major" />
+                {% elif user.exp_points >= 500 %}
+                    <img src="../static/images/game-assets/rank5.png" title="First Sergeant" />
+                {% elif user.exp_points >= 400 %}
+                    <img src="../static/images/game-assets/rank4.png" title="Staff Sergeant" />
+                {% elif user.exp_points >= 300 %}
+                    <img src="../static/images/game-assets/rank3.png" title="Sergeant" />
+                {% elif user.exp_points >= 200 %}
+                    <img src="../static/images/game-assets/rank2.png" title="Corporal" />
+                {% else %}
+                    <img src="../static/images/game-assets/rank1.png" title="Private" />
+                {% endif %}
+                </div>
+                <div class="stats" title="Experience Points">
+                    XP: {{user.exp_points}}
+                </div>
+                <div class="stats" title="Galactic Gems">
+                    <img src="../static/images/game-assets/gems.png" class="user-icons" />
+                    {{user.galactic_gems}}
+                </div>
+                <!-- {{user.planets_defeated}} -->
+                <div class="stats" title="Strength">
+                    <img src="../static/images/game-assets/strength.png" class="user-icons" /> {{user.strength}}
+                </div>
+                <div class="stats" title="Speed">
+                    <img src="../static/images/game-assets/speed.png" class="user-icons" /> {{user.speed}}
+                </div>
+                <div class="stats" title="Armor">
+                    <img src="../static/images/game-assets/armor.png" class="user-icons" /> {{user.armor}} 
+                </div>
+            </div>
+            
+        </div>
+        <div class="right-column column-styling column-position">
+            <div class="round-white-box increase-size"></div>
+        </div>
+    </div>
+
+{% endblock %}

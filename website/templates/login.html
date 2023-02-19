@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block title %}Login{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <div class="logo-group">
+        <img src="../static/images/logo.png" id="logo">
+    </div>
+    <h3 align="center">Agent Login</h3>
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input 
+            type="email" 
+            class="form-control space-input" 
+            id="email" 
+            name="email"
+            placeholder="Enter email"
+        />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+            type="password" 
+            class="form-control space-input" 
+            id="password" 
+            name="password"
+            placeholder="Enter password"
+        />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <h3 align="center" style="padding-top: 15px;">Sign Up</h3>
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            name="email"
+            placeholder="Enter email"
+        />
+    </div>
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="firstName" 
+            name="firstName"
+            placeholder="Enter first name"
+        />
+    </div>
+    <div class="form-group">
+        <label for="password1">Password</label>
+        <input 
+            type="password"
+            class="form-control"
+            id="password1"
+            name="password1"
+            placeholder="Enter password"
+        />
+    </div>
+    <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <input 
+            type="password" 
+            class="form-control" 
+            id="password2" 
+            name="password2"
+            placeholder="Enter password"
+        />
+    </div>
+    <div class="form-group" style="height: 250px;">
+        <div>
+            <label for="character-options">Choose a character:</label>
+            <select id="character-options" name="character-options" onclick="displayCharacter();">
+                <option value="character1" selected>Atlas Infinity</option>
+                <option value="character2">Drexar Vortex</option>
+                <option value="character3">Hanzo Shadowstrike</option>
+            </select>
+        </div>
+        <div>
+            <div id="display-character-image">
+            </div>
+            <div id="display-character-info"></div>
+        </div>
+        
+    </div>
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    
+</form>
+
+{% endblock %}
+
