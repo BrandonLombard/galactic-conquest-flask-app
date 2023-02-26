@@ -11,8 +11,10 @@ views = Blueprint('views', __name__)
 def home():
     if request.method == 'POST':
         user_stats = json.loads(request.data)
-        
-        
+
+    # elif request.method == 'GET':
+    #     user_stats = json.loads(request.data)
+    #     planets_defeated = user_stats['planets_defeated']
 
         # if len(note) < 1:
         #     flash('Note is too short!', category='error')
@@ -35,3 +37,4 @@ def delete_note():
             db.session.commit()
     
     return jsonify({})
+

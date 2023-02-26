@@ -19,6 +19,8 @@ function displayCharacter() {
         displayText += `<p class="display-signup-character" style="margin-left: 5px;">${startingCharacterData[selected][0]}<br>`;
         displayText += `Origin: ${startingCharacterData[selected][1]}<br>`;
         displayText += `Ability: ${startingCharacterData[selected][2]}`;
+        displayText += `<img src='../static/images/game-assets/${startingCharacterData[selected][1]}.png' class='icon'>`;
+        displayText += `<img src='../static/images/game-assets/character${startingCharacterData[selected][3]}-ship.png' class='icon rotate-left'>`;
         displayText += `</p></div>`;
         displayCharacter.innerHTML = displayText;
     }
@@ -57,11 +59,42 @@ function getCharacterData() {
     
 }
 
-const startingCharacterData = {
-    'character1': ['Atlas Infinity', 'Earth', 'Armor'],
-    'character2': ['Drexar Vortex', 'Novara', 'Speed'],
-    'character3': ['Hanzo Shadowstrike', 'Avalon', 'Strength'],
-    'galaxion': ['Galaxion', 'Tartarus', 'Pure Evil']
+function toggleMap(className) {
+    var map = document.querySelector(".map");
+    var shop = document.querySelector(".shop");
+    var game = document.querySelector(".game");
+    if (className == "map") {
+        map.style.visibility = "visible"
+        shop.style.visibility = "hidden"
+        game.style.visibility = "hidden"
+    } else if (className == "game") {
+        map.style.visibility = "hidden"
+        shop.style.visibility = "hidden"
+        game.style.visibility = "visible"
+    } else {
+        map.style.visibility = "hidden"
+        shop.style.visibility = "visible"
+        game.style.visibility = "hidden"
+    }
 }
+
+// Function that opens the game screen when the player clicks on a planet
+function openGame(num, character) {
+    // Param 'num' refers to the planet number they have clicked.
+    toggleMap("game");
+    // This function actually loads the game
+    // Refer to game.js
+    loadGame(num, character);
+}
+
+// Character information that is displayed while signing up. 
+// See function displayCharacter() above
+const startingCharacterData = {
+    'character1': ['Atlas Infinity', 'Earth', 'Armor', 1],
+    'character2': ['Drexar Vortex', 'Novara', 'Speed', 2],
+    'character3': ['Hanzo Shadowstrike', 'Avalon', 'Strength', 3],
+    'galaxion': ['Galaxion', 'Tartarus', 'Pure Evil', 4]
+};
+
 
 displayCharacter();

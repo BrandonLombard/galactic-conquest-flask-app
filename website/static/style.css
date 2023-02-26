@@ -54,7 +54,7 @@ form {
 }
 
 .btn:hover {
-    background: #4E706A
+    background: #4E706A;
 }
 
 .space-input {
@@ -139,6 +139,12 @@ img {
     font-size: 20px;
 }
 
+.right-column .round-white-box {
+    background: url('./images/graphical-assets/space-cartoon-purple.png');
+    background-size: cover;
+    border: 1px solid #FBB725;
+}
+
 .increase-size {
     width: 85%;
 }
@@ -204,4 +210,139 @@ img {
     margin-top: 5px;
     width: 150px;
     height: 125px;
+}
+
+.nav-user {
+    text-decoration: none;
+}
+
+.nav-user:hover {
+    text-decoration: none;
+    background: transparent;
+}
+
+.map {
+    margin-top: 50px;
+    position: relative;
+    visibility: visible;
+}
+
+.planet {
+    position: absolute;
+    width: 100px;
+}
+
+.unlocked:hover {
+    width: 125px;
+    transition: 0.5s;
+    margin-left: -15px;
+    margin-top: -15px;
+    cursor: pointer;
+    /* animation: 1s 1 hover-planet; */
+}
+
+.unlocked {
+    filter: none;
+}
+
+.locked {
+    filter: grayscale(1);
+}
+
+.game-nav {
+    margin-top: 15px;
+    width: 90%;
+}
+
+.game-nav > button {
+    background: #1F122F;
+    color: gray;
+    border: 1px solid #FBB725;
+    /* border: none; */
+    padding: 5px 15px 5px 15px;
+}
+
+.game-nav > button:hover {
+    background: #4E706A;
+    color: white;
+    transition: 0.5s;
+}
+
+.shop {
+    visibility: hidden;
+    color: white;
+}
+
+.game {
+    visibility: hidden;
+    color: white;
+    width: 95%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    margin-top: -75px;
+}
+
+.canvas {
+    position: relative;
+    width: 95%;
+    height: 95%;
+    border: 1px solid white;
+    overflow: hidden;
+    background-repeat: repeat-y;
+}
+
+.planet-bg {
+    position: absolute;
+    height: 600px;
+    animation-name: MOVE-BG;
+    animation-duration: 10s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.first-bg {
+    top: -601px;
+}
+
+.second-bg {
+    top: -1200px;
+}
+
+@keyframes MOVE-BG {
+   from {
+     transform: translateY(600px);
+   }
+   to { 
+    transform: translateY(1200px);
+   }
+}
+
+
+#character-ship {
+    position: absolute;
+    width: 75px;
+    bottom: 10px;
+    left: 175px;
+    z-index: 5;
+    transition: 0.1s;
+}
+
+.no-select {
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    padding-right: 5px;
+    margin-left: 10px;
+}
+
+.rotate-left {
+    transform: rotate(-90deg);
 }

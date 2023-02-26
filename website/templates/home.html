@@ -51,7 +51,8 @@
                 {% endif %}
                 </div>
                 <div class="stats" title="Experience Points">
-                    XP: {{user.exp_points}}
+                    <img src="../static/images/game-assets/xp.png" class="user-icons" />
+                    {{user.exp_points}}
                 </div>
                 <div class="stats" title="Galactic Gems">
                     <img src="../static/images/game-assets/gems.png" class="user-icons" />
@@ -71,7 +72,58 @@
             
         </div>
         <div class="right-column column-styling column-position">
-            <div class="round-white-box increase-size"></div>
+            <div class="round-white-box increase-size">
+                <!-- Displays the game tabs on the screen for the map and shop-->
+                <!-- See index.js for onclick functions below-->
+                <div class="game-nav">
+                    <button onclick="toggleMap('map');">Map</button>
+                    <button onclick="toggleMap('shop');">Shop</button>
+                    <hr style="background: #FBB725;">
+                </div>
+                
+                <!-- Displays the level maps on the screen -->
+                <div class="map">
+                    {% set y_pos = namespace(value=-10) %}
+                    {% set x_pos = namespace(value=-225) %}
+                    {% for i in range(12) %}
+
+                        {% if i == 3 or i == 4 %}
+                            {% set y_pos.value = y_pos.value + 50 %}
+                        {% elif i == 7 %}
+                            {% set y_pos.value = y_pos.value - 50 %}
+                        {% endif %}
+
+                        {% if user.planets_defeated == i %}
+                            {% set character = user.character %}
+                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet unlocked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onclick="openGame({{i}}, '{{user.character}}');">
+                        {% else %}
+                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet locked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;">
+                        {% endif %}
+                        
+                        {% set x_pos.value = x_pos.value + 115 %}
+                        {% if x_pos.value > 200 %}
+                            {% set x_pos.value = -225 %}
+                            {% set y_pos.value = y_pos.value + 225 %}
+                        {% endif %}
+
+                        {% if i == 3  or i == 4 %}
+                            {% set y_pos.value = y_pos.value - 50 %}
+                        {% elif i == 8 %}
+                            {% set y_pos.value = y_pos.value + 50 %}
+                        {% endif %}
+                        
+
+                    {% endfor %}
+                </div>
+                <div class="shop">
+                    Hey there, this feature is coming soon!
+                </div>
+                <div class="game">
+                    <div class="canvas">
+                        <img src='../static/images/game-assets/{{user.character}}-ship.png' id='character-ship' class="no-select">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
