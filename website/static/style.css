@@ -286,7 +286,7 @@ img {
 .canvas {
     position: relative;
     width: 95%;
-    height: 95%;
+    height: 88%;
     border: 1px solid white;
     overflow: hidden;
     background-repeat: repeat-y;
@@ -309,6 +309,7 @@ img {
     top: -1200px;
 }
 
+/* Moves the background during the game */
 @keyframes MOVE-BG {
    from {
      transform: translateY(600px);
@@ -343,6 +344,89 @@ img {
     margin-left: 10px;
 }
 
-.rotate-left {
-    transform: rotate(-90deg);
+.level-menu {
+    position: absolute;
+    width: 405px;
+    height: 435px;
+    background-color: white;
+    z-index: 10;
+    left: 25px;
+    top: 50px;
+    opacity: 50%;
+    color: black;
+}
+
+#level-menu-content {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.level-menu > button {
+    position: absolute;
+    padding: 25px 35px 25px 35px;
+    border: 1px solid black;
+    top: 300px;
+    left: 140px;
+    font-size: 25px;
+}
+
+.level-menu > button:hover {
+    left: 130px;
+    top: 290px;
+    font-size: 35px;
+    transition: 0.5s;
+}
+
+#level-title {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+}
+
+#level-subtitle {
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+#level-description {
+    width: 250px;
+}
+
+.help {
+    display: flex;
+    visibility: hidden;
+    color: white;
+    overflow-y: scroll;
+    margin-top: -675px;
+    height: 600px;
+}
+
+.help > div > h1 {
+    text-align: center;
+}
+
+.help > div > p {
+    width: 400px;
+}
+
+.key {
+    border: 1px solid yellow;
+    padding: 5px;
+    margin: 5px;
+}
+
+#planet-name {
+    position: absolute;
+    background-color: white;
+    color: black;
+    padding: 10px;
+    visibility: hidden;
+    transition: 0.5s;
+    z-index: 15;
+    font-size: 15px;
+    opacity: 75%;
+    min-width: 50px;
 }

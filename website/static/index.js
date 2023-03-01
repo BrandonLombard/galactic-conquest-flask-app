@@ -8,9 +8,11 @@ function deleteNote(noteId) {
     });
 }
 
+//  Displays the selected character on the sign up page
 function displayCharacter() {
     var selected = document.getElementById("character-options").value;
     var displayCharacter = document.getElementById('display-character-image');
+    // If no player options are selected
     if (selected == "none") {
         displayCharacter.innerHTML = `<img src="./static/images/game-assets/.png" class="display-signup-character" />`;
         return;
@@ -20,12 +22,13 @@ function displayCharacter() {
         displayText += `Origin: ${startingCharacterData[selected][1]}<br>`;
         displayText += `Ability: ${startingCharacterData[selected][2]}`;
         displayText += `<img src='../static/images/game-assets/${startingCharacterData[selected][1]}.png' class='icon'>`;
-        displayText += `<img src='../static/images/game-assets/character${startingCharacterData[selected][3]}-ship.png' class='icon rotate-left'>`;
+        displayText += `<img src='../static/images/game-assets/character${startingCharacterData[selected][3]}-ship.png' class='icon' style='width: 75px;'>`;
         displayText += `</p></div>`;
         displayCharacter.innerHTML = displayText;
     }
 }
 
+// Loads the game character's profile
 function loadProfile() {
     var profileImage = document.getElementById("character-image");
     var displayText = `<img src="/images/game-assets/{{user.character}}.png">`;
@@ -33,6 +36,7 @@ function loadProfile() {
     
 }
 
+// Generates the range based on the amount of experience points the player has
 function getRank(expPoints) {
     return;
 }
@@ -59,22 +63,33 @@ function getCharacterData() {
     
 }
 
+// Toggle between game screens, such as Map, Shop, and Help
 function toggleMap(className) {
+
     var map = document.querySelector(".map");
     var shop = document.querySelector(".shop");
     var game = document.querySelector(".game");
-    if (className == "map") {
-        map.style.visibility = "visible"
-        shop.style.visibility = "hidden"
-        game.style.visibility = "hidden"
-    } else if (className == "game") {
-        map.style.visibility = "hidden"
-        shop.style.visibility = "hidden"
-        game.style.visibility = "visible"
-    } else {
-        map.style.visibility = "hidden"
-        shop.style.visibility = "visible"
-        game.style.visibility = "hidden"
+    var help = document.querySelector(".help");
+
+    const menuElements = {
+        "map": map, 
+        "shop": shop,
+        "game": game,
+        "help": help
+    };
+    // Loop through the menu options and change them to either visible or hidden
+    for (const element in menuElements) {
+        elementString = element.toString();
+        // If the element iteration variable is the same as the selected one
+        // Then make it visible in the right column
+        if (elementString == className) {
+            menuElements[element].style.visibility = "visible";
+        } 
+        //  Otherwise, make that element hidden
+        else {
+            menuElements[element].style.visibility = "hidden";
+        };
+
     }
 }
 
@@ -86,15 +101,5 @@ function openGame(num, character) {
     // Refer to game.js
     loadGame(num, character);
 }
-
-// Character information that is displayed while signing up. 
-// See function displayCharacter() above
-const startingCharacterData = {
-    'character1': ['Atlas Infinity', 'Earth', 'Armor', 1],
-    'character2': ['Drexar Vortex', 'Novara', 'Speed', 2],
-    'character3': ['Hanzo Shadowstrike', 'Avalon', 'Strength', 3],
-    'galaxion': ['Galaxion', 'Tartarus', 'Pure Evil', 4]
-};
-
 
 displayCharacter();

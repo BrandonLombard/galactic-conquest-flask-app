@@ -19,6 +19,7 @@
         <button type="submit" class="btn btn-primary">Add Note</button>
     </div> -->
     <div id="container">
+        <!-- Left column -->
         <div class="left-column column-styling column-position">
             <div class="round-white-box">
                 <div id="userimage">
@@ -71,6 +72,7 @@
             </div>
             
         </div>
+        <!-- Right column -->
         <div class="right-column column-styling column-position">
             <div class="round-white-box increase-size">
                 <!-- Displays the game tabs on the screen for the map and shop-->
@@ -78,6 +80,7 @@
                 <div class="game-nav">
                     <button onclick="toggleMap('map');">Map</button>
                     <button onclick="toggleMap('shop');">Shop</button>
+                    <button onclick="toggleMap('help');">Help</button>
                     <hr style="background: #FBB725;">
                 </div>
                 
@@ -95,9 +98,10 @@
 
                         {% if user.planets_defeated == i %}
                             {% set character = user.character %}
-                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet unlocked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onclick="openGame({{i}}, '{{user.character}}');">
+                            <div id="planet-name"></div>
+                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet unlocked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onclick="openGame({{i}}, '{{user.character}}');" onmouseover="displayText(this, {{i}})" onmouseout="clearText(this)">
                         {% else %}
-                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet locked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;">
+                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet locked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onmouseover="displayText(this, {{i}})" onmouseout="clearText(this)">
                         {% endif %}
                         
                         {% set x_pos.value = x_pos.value + 115 %}
@@ -115,13 +119,48 @@
 
                     {% endfor %}
                 </div>
+                <!-- Div that contains the shop -->
                 <div class="shop">
                     Hey there, this feature is coming soon!
                 </div>
+                <!-- Div that contains the game -->
                 <div class="game">
                     <div class="canvas">
+                        <!-- The player's ship -->
                         <img src='../static/images/game-assets/{{user.character}}-ship.png' id='character-ship' class="no-select">
+                        <div class="level-menu">
+                            <div id="level-title"></div>
+                            <div id="level-subtitle"></div>
+                            <div id="level-menu-content">
+                                <div id="level-character"></div>
+                                <div id="level-description"></div>
+                            </div>
+                            <button id="start" onclick="buildLevel();">Start</button>
+                        </div>
                     </div>
+                </div>
+                <div class="help">
+                    <div>
+                        <h1>How to play</h1><br>
+                        <p>
+                            Help the Galactic Federation defeat the evil Galaxion, who
+                            is trying to take over the Milky Way Galaxy. He has already 
+                            infiltrated 12 planets. It's up to you to take back each planet
+                            and save the galaxy!
+                        </p>
+                        <br>
+                        <span class="key"> A </span> <span class="key"> &#8592;</span> Move Left<br><br>
+                        <span class="key"> D </span> <span class="key"> &#8594;</span> Move Right<br><br>
+                        <span class="key"> SPACE </span> <span class="key"> W </span> <span class="key"> &#8593; </span> Shoot Laser <br><br>
+                        <p>
+                            Click on a planet in the 'Map' menu. Then click the 'Start' button.
+                        </p>
+                        <p>
+                        Avoid and destroy the enemy ships to lead the galactic
+                        federation to victory against Galaxion.
+                        </p>
+                    </div>
+                       
                 </div>
             </div>
         </div>
