@@ -60,7 +60,7 @@
                     {{user.galactic_gems}}
                 </div>
                 <!-- {{user.planets_defeated}} -->
-                <div class="stats" title="Strength">
+                <div class="stats" title="Power">
                     <img src="../static/images/game-assets/strength.png" class="user-icons" /> {{user.strength}}
                 </div>
                 <div class="stats" title="Speed">
@@ -101,7 +101,7 @@
                             <div id="planet-name"></div>
                             <img src="../static/images/game-assets/planet{{i}}.png" class="planet unlocked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onclick="openGame({{i}}, '{{user.character}}');" onmouseover="displayText(this, {{i}})" onmouseout="clearText(this)">
                         {% else %}
-                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet locked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onmouseover="displayText(this, {{i}})" onmouseout="clearText(this)">
+                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet locked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onmouseover="displayText(this, {{i}}, true)" onmouseout="clearText(this)">
                         {% endif %}
                         
                         {% set x_pos.value = x_pos.value + 115 %}
@@ -121,13 +121,85 @@
                 </div>
                 <!-- Div that contains the shop -->
                 <div class="shop">
-                    Hey there, this feature is coming soon!
+                    <h1 style="color: white;">Shop</h1><br>
+                    <!-- Displays the shop items for purchase -->
+                    <div class="shop-item">
+                        <div class="shop-item-count"> 
+                            <img src="../static/images/game-assets/strength.png" class="shop-item-image">
+                            <div>Power</div>
+                        </div>
+                        <div class="shop-item-count">
+                            <button class="shop-button" onclick="updateShop('strength-number', 1, 75, {{user.galactic_gems}});">+</button>
+                            <button class="shop-button" onclick="updateShop('strength-number', -1, 75, {{user.galactic_gems}})">-</button>
+                            <div id="strength-number">0</div>
+                        </div>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-item-count"> 
+                            <img src="../static/images/game-assets/speed.png" class="shop-item-image">
+                            <div>Speed</div>
+                        </div>
+                        <div class="shop-item-count">
+                            <button class="shop-button" onclick="updateShop('speed-number', 1, 100, {{user.galactic_gems}});">+</button>
+                            <button class="shop-button" onclick="updateShop('speed-number', -1, 100, {{user.galactic_gems}})">-</button>
+                            <div id="speed-number">0</div>
+                        </div>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-item-count"> 
+                            <img src="../static/images/game-assets/armor.png" class="shop-item-image">
+                            <div>Armor</div>
+                        </div>
+                        <div class="shop-item-count">
+                            <button class="shop-button" onclick="updateShop('armor-number', 1, 100, {{user.galactic_gems}});">+</button>
+                            <button class="shop-button" onclick="updateShop('armor-number', -1, 100, {{user.galactic_gems}})">-</button>
+                            <div id="armor-number">0</div>
+                        </div>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-item-count">
+                            Coming soon!
+                        </div>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-item-count">
+                            Coming soon!
+                        </div>
+                    </div>
+                    <!--  total-item -->
+                    <form method="POST">
+                        <div class="shop-item">  
+                            <div class="shop-item-count"> 
+                                <button id="purchase-button">Purchase</button>
+                            </div>
+                            <div class="shop-item-count"> 
+                                <div style="width: 10px;"></div>
+                                <img src="../static/images/game-assets/gems.png" class="shop-item-image" onclick="purchaseItems();">
+                                <div id="total-price">0</div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <!-- Div that contains the game -->
                 <div class="game">
                     <div class="canvas">
-                        <!-- The player's ship -->
+                        <!-- Puts The player's ship on the screen -->
                         <img src='../static/images/game-assets/{{user.character}}-ship.png' id='character-ship' class="no-select">
+                        <!-- Puts the player's health on the screen -->
+                        <div id="player-health" class="player-stats">
+                            <img src="../static/images/game-assets/health-icon.png">
+                            <progress value="100" max="100" id="healthbar"></progress>
+                        </div>
+                        <div id="player-exp-points" class="player-stats">
+                            <img src="../static/images/game-assets/xp.png">
+                            <div>0</div>
+                        </div>
+                        <div id="player-gems" class="player-stats">
+                            <img src="../static/images/game-assets/gems.png">
+                            <div>0</div>
+                        </div>
+                        <div id="menu-background"></div>
+                        <!-- Displays the level menu when they first click on the planet level -->
                         <div class="level-menu">
                             <div id="level-title"></div>
                             <div id="level-subtitle"></div>
@@ -135,6 +207,7 @@
                                 <div id="level-character"></div>
                                 <div id="level-description"></div>
                             </div>
+                            <!-- This start button begins the game -->
                             <button id="start" onclick="buildLevel();">Start</button>
                         </div>
                     </div>

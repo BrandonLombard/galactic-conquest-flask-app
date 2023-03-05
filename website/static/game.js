@@ -46,31 +46,40 @@ function addPlayer(character, canvas) {
         laserImage.style.height = "25px";
         laserImage.style.position = "absolute";
         laserImage.style.top = playerY + "px";
-        var updatedPlayerX = playerX + 27;
+        var updatedPlayerX = playerX + 30;
         laserImage.style.left = updatedPlayerX + "px";
         laserImage.className = "no-select";
 
+
+
         // This moves the laser on a timer
-        function moveLaser () {
+        function moveLaser(laserImage) {
             var laserPosY = laserImage.offsetTop - 3;
-            var laserPosX = laserImage.offsetTop - 3;
-            
+            var laserPosX = laserImage.offsetLeft - 3;
+            // If the laser reaches a certain point,
+            // Stop the timer, remove the image, and remove it from the array
+            if (laserPosY < 0) {
+                clearInterval(shootLaser);
+                laserImage.remove();
+                levelLasers.shift();
+            };
             // Is laser is within a specified set of x and y coordinates
             // Y axis
             if (laserPosY > -100 && laserPosY < 600) {
                 laserImage.style.top = laserPosY + "px";
-            } 
+            }
             // X Axis
             else if (laserPosX > -100 && laserPosX < 600) {
                 laserImage.style.left = laserPosX + "px";
-            }
+            };
         }
 
         if (name == ' ' || name == 'f' || name == 'w' || name == 'arrowup') {
             canvas.append(laserImage);
+            levelLasers.push(laserImage);
             laserImage.style.transform = playerShip.style.transform;
             clearInterval(shootLaser);
-            var shootLaser = setInterval(moveLaser, 10);
+            var shootLaser = setInterval(moveLaser, 10, laserImage);
         };
 
         if (name == 'a' || name == "arrowleft") {
@@ -111,53 +120,110 @@ function startMenuData(planetNum) {
     description.innerHTML = `Lead a full assault on ${levelData[planetNum][0]} and defeat Commander ${levelData[planetNum][1]} and their fleet of Cosmic Empire ships. `;
 }
 
-function enemyShip() {
+// Sets the enemy's x and y position and puts them on the screen
+function buildEnemy(enemyType, size=75) {
+    // Add the enemy image
+    var enemyImage = document.createElement('img');
+    enemyImage.src = `../static/images/game-assets/${enemyType}.png`;
 
+    // Set the size and position
+    enemyImage.style.height = size + "px";
+    enemyImage.style.position = 'absolute';
+    var randomLeft = Math.random() * 400;
+    enemyImage.style.left = randomLeft + "px";
+
+    // Add the new enemy to the screen
+    var canvas = document.querySelector('.canvas');
+    canvas.appendChild(enemyImage);
+
+    // Use a CSS keyframe that makes the enemy move downward
+    enemyImage.className = 'animate-down';
+
+    // Detect if the enemy and character collide
+    var characterImage = document.getElementById('character-ship');
+    setInterval(checkCollision, 100, enemyImage, characterImage);
+
+    var lastElement = parseInt(levelLasers[levelLasers.length - 1]);
+    console.log('last element: ' + lastElement);
+    checkLaser = setInterval(checkLaserCollision, 100, enemyImage, levelLasers[lastElement]);
+
+    
 }
 
-function enemyBomber() {
-
+function enemyShip(levelNum) {
+    console.log(`Added a ship at level ${levelNum}`);
+    buildEnemy(`planet${levelNum}-ship`);
 }
 
-function enemyBoss() {
-
+function enemyBomber(levelNum) {
+    buildEnemy('bomber');
 }
 
-function enemyTurret() {
-
+function enemyBoss(levelNum) {
+    buildEnemy(`boss-ship`, 100);
 }
 
-function enemyObstacle() {
+function enemyTurret(levelNum) {
+    console.log('Added a turret');
+    buildEnemy(`turret`);
+}
 
+function enemyObstacle(levelNum) {
+    randomObstacle = Math.round(Math.random()*6);
+    buildEnemy(`obstacle${randomObstacle}`);
+}
+
+function addGem(levelNum) {
+    buildEnemy('gems', 45);
 }
 
 // Adds enemies in the game
-function addEnemy(enemyList, levelNum) {
-    // Get a random index value from the enemyList
-    var enemyListLength = enemyList.length;
-    var randomNum = Math.floor(Math.random() * enemyListLength);
+function addEnemy(enemyObj, levelNum) {
+    // Get a random value from the enemyObj
+    var enemyObjKeys = Object.keys(enemyObj);
+    var enemyObjLength = enemyObjKeys.length;
+    var randomNum = Math.floor(Math.random() * enemyObjLength);
+    var randomEnemyKey = enemyObjKeys[randomNum];
+    var randomEnemyValue = enemyObj[randomEnemyKey];
 
-    // If that index value is zero, remove it from the list
-    if (enemyList[randomNum] <= 0) {
-        enemyList.splice(randomNum, 1);
-    } else if (enemyListLength <= 0) {
-        buildLevel(levelNum, true);
+    // If that value is zero, remove it from the object
+    // Else if the enemy object is less than 0 then stop adding enemies
+    // Else decrement the enemy from the enemy object and add that random enemy
+    if (randomEnemyValue <= 0) {
+        delete enemyObj[randomEnemyKey]
+    } else if (enemyObjLength <= 0) {
+        stopAddingEnemies(levelNum);
     } else {
-        enemyList[randomNum] = enemyList[randomNum] - 1;
+        if (randomEnemyKey == 'ships') {
+            enemyShip(levelNum);
+        } else if (randomEnemyKey == 'bombers') {
+            enemyBomber(levelNum);
+        } else if (randomEnemyKey == 'obstacles') {
+            enemyObstacle(levelNum);
+        } else if (randomEnemyKey == 'turrets') {
+            enemyTurret(levelNum);
+        } else if (randomEnemyKey == 'gems') {
+            addGem(levelNum);
+        } else {
+            enemyBoss(levelNum);
+        };
+        enemyObj[randomEnemyKey] = enemyObj[randomEnemyKey] - 1;
     }
 
-    console.log(enemyList);
+    console.log(enemyObj);
 }
 
 // Builds the playable level with its assets
-function buildLevel(won=false) {
+function buildLevel() {
     //  Display the initital menu screen
     var levelMenu = document.querySelector('.level-menu');
     levelMenu.style.visibility = 'hidden';
 
     var subtitle = document.getElementById('level-subtitle').textContent;
     var planetNum = subtitle.replace("Level ", "");
-    console.log(subtitle);
+    let levelNum = parseInt(planetNum);
+
+    console.log(levelNum);
 
     // Create a new list with the levelData
     var numShips = levelData[levelNum][2];
@@ -165,29 +231,43 @@ function buildLevel(won=false) {
     var numObstacles = levelData[levelNum][4];
     var numTurrets = levelData[levelNum][5];
     var numBosses = levelData[levelNum][6];
-    var enemyList = [numShips, numBombers, numObstacles, numTurrets, numBosses]
+    var numGems = levelData[levelNum][7];
+
+    var enemyObj = {
+        'ships': numShips, 
+        'bombers': numBombers, 
+        'obstacles': numObstacles, 
+        'turrets': numTurrets, 
+        'bosses': numBosses,
+        'gems': numGems
+    }
     
+    // Makes the enemies show up faster by 0.1 seconds every level
+    var speed = 2 - (0.1 * levelNum);
     // Call the addEnemy() function on a timer a set amount of times
-    if (won == false) {
-        const playingGame = setInterval(addEnemy, 1000, enemyList, levelNum);
-    }
-    // If they won the game, then stop the interval and display win screen
-    if (won == true) {
-        clearInterval(playingGame);
-    }
-    
+    playingGame = setInterval(addEnemy, speed * 1000, enemyObj, levelNum);
+}
+
+// Stops adding enemies to the screen
+function stopAddingEnemies(levelNum) {
+    clearInterval(playingGame);
 }
 
 // Displays the planet names over the planet image on the map
-function displayText(planet, planetNum) {
+function displayText(planet, planetNum, locked=false) {
     // `planet` is the planet image element
     // `planetNum` is the level they're playing
 
     // Obtain
     var planetName = document.getElementById('planet-name');
     planetName.style.visibility = "visible";
-    planetName.textContent = `${levelData[planetNum][0]}`;
+    if (locked == true) {
+        planetName.innerHTML = `<img src="../static/images/game-assets/forbidden.png" width='20px'>${levelData[planetNum][0]}`;
+    } else {
+        planetName.innerHTML = `${levelData[planetNum][0]}`;
 
+    }
+    
     // Find the currently selected planet's position
     var topPos = planet.offsetTop + 75;
     var leftPos = planet.offsetLeft;
@@ -202,4 +282,94 @@ function displayText(planet, planetNum) {
 function clearText(x) {
     var planetName = document.getElementById('planet-name');
     planetName.style.visibility = "hidden";
+}
+
+// Detect when a player and enemy character collide
+function checkCollision(enemyImage, characterImage) {
+    const rect1 = enemyImage.getBoundingClientRect();
+    const rect2 = characterImage.getBoundingClientRect();
+  
+    // Check if the two elements intersect
+    var collides = !(
+      rect1.bottom < rect2.top ||
+      rect1.top > rect2.bottom ||
+      rect1.right < rect2.left ||
+      rect1.left > rect2.right
+    );
+    if (collides) {
+        var playerHealth = document.getElementById('healthbar');
+        var playerGems = document.querySelector('#player-gems > div');
+        var enemyImageSrc = enemyImage.src;
+
+        if (enemyImageSrc.includes('gem')) {
+            var numGems = parseInt(playerGems.textContent);
+            numGems += 50;
+            playerGems.textContent = numGems;
+        } else if (enemyImageSrc.includes('planet')) {
+            playerHealth.value -= 10;
+        } else if (enemyImageSrc.includes('boss')) {
+            playerHealth.value -= 25;
+        } else if (enemyImageSrc.includes('obstacle')) {
+            playerHealth.value -= 15;
+        } 
+        else {
+            playerHealth.value -= 5;
+        }
+        enemyImage.remove()
+        
+    }
+  }
+
+function checkLaserCollision(enemyImage, laserImage) {
+    const rect1 = enemyImage.getBoundingClientRect();
+    const rect2 = laserImage.getBoundingClientRect();
+    var playerExpPoints = document.querySelector('#player-exp-points > div');
+    var playerGems = document.querySelector('#player-gems > div');
+
+    // Check if the two elements intersect
+    var collides = !(
+      rect1.bottom < rect2.top ||
+      rect1.top > rect2.bottom ||
+      rect1.right < rect2.left ||
+      rect1.left > rect2.right
+    );
+
+    if (collides) {
+        var numExpPoints = parseInt(playerExpPoints.textContent);
+        numExpPoints += 50;
+        playerExpPoints.textContent = numExpPoints;
+        characterImage.remove();
+        laserImage.remove()
+        clearInterval(checkLaser);
+    }
+}
+
+// This updates the shop when the user interacts with it (i.e. clicks a '+' button)
+function updateShop(itemId, number, price, gems) {
+    var itemNumber = document.getElementById(itemId);
+    var totalPrice = document.getElementById("total-price");
+    var itemNumberContent = parseInt(itemNumber.textContent);
+    
+    // See how many gems the user can afford
+    var maxNumber = gems / price;
+
+    // Makes it so the player can't go negative on their selections and
+    // they won't go over their budget
+    number = itemNumberContent + number;
+    if (number < 0 || number > maxNumber) {
+        return;
+    } 
+
+    // Calculate the total cost of the player's selections
+    var totalPriceCurrent = parseInt(totalPrice.textContent);
+    
+    var scoreCost = totalPriceCurrent + parseInt(number * price);
+    console.log(scoreCost);
+    totalPrice.textContent = scoreCost;
+    
+    itemNumber.textContent = number;
+    
+
+    totalPrice.innerHTML = `${scoreCost}`
+
 }
