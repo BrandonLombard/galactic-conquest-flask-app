@@ -345,31 +345,40 @@ function checkLaserCollision(enemyImage, laserImage) {
 }
 
 // This updates the shop when the user interacts with it (i.e. clicks a '+' button)
-function updateShop(itemId, number, price, gems) {
+function updateShop(itemId, command, price, gems) {
     var itemNumber = document.getElementById(itemId);
     var totalPrice = document.getElementById("total-price");
-    var itemNumberContent = parseInt(itemNumber.textContent);
     
-    // See how many gems the user can afford
-    var maxNumber = gems / price;
+    // Get data for the update numbers
+    var strengthNumber = parseInt(document.getElementById('strength-number').value);
+    var speedNumber = parseInt(document.getElementById('speed-number').value);
+    var armorNumber = parseInt(document.getElementById('armor-number').value);
+
+    // Calculate the total cost of the player's selections
+    var totalPriceCurrent = parseInt(totalPrice.value);
+    console.log(totalPriceCurrent)
+
+
+    var currentGems = parseInt(totalPrice.value);
+    
 
     // Makes it so the player can't go negative on their selections and
     // they won't go over their budget
-    number = itemNumberContent + number;
-    if (number < 0 || number > maxNumber) {
-        return;
-    } 
+    if (command == 'sub') {
+        if (parseInt(itemNumber.value) > 0) {
+            itemNumber.value = parseInt(itemNumber.value) - 1;
+            totalPrice.value = parseInt(totalPrice.value) - price;
+        }
+        
+    } else if (command == 'add') {
+        if (currentGems+price <= gems) {
+            itemNumber.value = parseInt(itemNumber.value) + 1;
+            totalPrice.value = parseInt(totalPrice.value) + price;
+        }
+        
+    }
+        
+    console.log("----" + itemNumber.value);
 
-    // Calculate the total cost of the player's selections
-    var totalPriceCurrent = parseInt(totalPrice.textContent);
     
-    var scoreCost = totalPriceCurrent + parseInt(number * price);
-    console.log(scoreCost);
-    totalPrice.textContent = scoreCost;
-    
-    itemNumber.textContent = number;
-    
-
-    totalPrice.innerHTML = `${scoreCost}`
-
 }

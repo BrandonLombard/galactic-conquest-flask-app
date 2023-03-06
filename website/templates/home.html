@@ -122,60 +122,62 @@
                 <!-- Div that contains the shop -->
                 <div class="shop">
                     <h1 style="color: white;">Shop</h1><br>
-                    <!-- Displays the shop items for purchase -->
-                    <div class="shop-item">
-                        <div class="shop-item-count"> 
-                            <img src="../static/images/game-assets/strength.png" class="shop-item-image">
-                            <div>Power</div>
-                        </div>
-                        <div class="shop-item-count">
-                            <button class="shop-button" onclick="updateShop('strength-number', 1, 75, {{user.galactic_gems}});">+</button>
-                            <button class="shop-button" onclick="updateShop('strength-number', -1, 75, {{user.galactic_gems}})">-</button>
-                            <div id="strength-number">0</div>
-                        </div>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-item-count"> 
-                            <img src="../static/images/game-assets/speed.png" class="shop-item-image">
-                            <div>Speed</div>
-                        </div>
-                        <div class="shop-item-count">
-                            <button class="shop-button" onclick="updateShop('speed-number', 1, 100, {{user.galactic_gems}});">+</button>
-                            <button class="shop-button" onclick="updateShop('speed-number', -1, 100, {{user.galactic_gems}})">-</button>
-                            <div id="speed-number">0</div>
-                        </div>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-item-count"> 
-                            <img src="../static/images/game-assets/armor.png" class="shop-item-image">
-                            <div>Armor</div>
-                        </div>
-                        <div class="shop-item-count">
-                            <button class="shop-button" onclick="updateShop('armor-number', 1, 100, {{user.galactic_gems}});">+</button>
-                            <button class="shop-button" onclick="updateShop('armor-number', -1, 100, {{user.galactic_gems}})">-</button>
-                            <div id="armor-number">0</div>
-                        </div>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-item-count">
-                            Coming soon!
-                        </div>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-item-count">
-                            Coming soon!
-                        </div>
-                    </div>
-                    <!--  total-item -->
                     <form method="POST">
+                        <!-- Displays the shop items for purchase -->
+                        <div class="shop-item">
+                            <div class="shop-item-count"> 
+                                <img src="../static/images/game-assets/strength.png" class="shop-item-image">
+                                <div>Power</div>
+                            </div>
+                            <div class="shop-item-count">
+                                <button type="button" class="shop-button" onclick="updateShop('strength-number', 'add', 50, {{user.galactic_gems}});">+</button>
+                                <button type="button" class="shop-button" onclick="updateShop('strength-number', 'sub', 50, {{user.galactic_gems}})">-</button>
+                                <input id="strength-number" name="strength" class="shop-form" value='0' type="number">
+                            </div>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-count"> 
+                                <img src="../static/images/game-assets/speed.png" class="shop-item-image">
+                                <div>Speed</div>
+                            </div>
+                            <div class="shop-item-count">
+                                <button type="button" class="shop-button" onclick="updateShop('speed-number', 'add', 75, {{user.galactic_gems}});">+</button>
+                                <button type="button" class="shop-button" onclick="updateShop('speed-number', 'sub', 75, {{user.galactic_gems}})">-</button>
+                                <input id="speed-number" name="speed" class="shop-form" value='0' type="number">
+                            </div>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-count"> 
+                                <img src="../static/images/game-assets/armor.png" class="shop-item-image">
+                                <div>Armor</div>
+                            </div>
+                            <div class="shop-item-count">
+                                <button type="button" class="shop-button" onclick="updateShop('armor-number', 'add', 25, {{user.galactic_gems}});">+</button>
+                                <button type="button" class="shop-button" onclick="updateShop('armor-number', 'sub', 25, {{user.galactic_gems}})">-</button>
+                                <input id="armor-number" name="armor" class="shop-form" type="number" value='0'>
+                            </div>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-count">
+                                Coming soon!
+                            </div>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-count">
+                                Coming soon!
+                            </div>
+                        </div>
+                        <!--  total-item -->
+                        
                         <div class="shop-item">  
                             <div class="shop-item-count"> 
-                                <button id="purchase-button">Purchase</button>
+                                <button id="purchase-button" type="submit">Purchase</button>
                             </div>
                             <div class="shop-item-count"> 
                                 <div style="width: 10px;"></div>
                                 <img src="../static/images/game-assets/gems.png" class="shop-item-image" onclick="purchaseItems();">
-                                <div id="total-price">0</div>
+                                <input id="total-price" name="price" class="shop-form" value='0' type="number" style="width: 100px;">
+                                <div style="visibility: hidden;">{{user.email}}</div>
                             </div>
                         </div>
                     </form>

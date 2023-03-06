@@ -295,6 +295,7 @@ img {
     display: flex;
     justify-content: space-between;
     font-size: 25px;
+    margin-bottom: 15px;
 }
 
 .shop-item-image {
@@ -307,6 +308,11 @@ img {
     margin-left: 10px;
     display: flex;
     align-items: center;
+}
+
+.shop-form {
+    width: 50px;
+    margin-left: 10px;
 }
 
 .total-item {
