@@ -26,4 +26,5 @@ const levelData = {
 
 // Stores each enemy in this array while the game is running to keep track of them
 var levelLasers = [];
+var laserNum = 0;
 var enemyImages = [];

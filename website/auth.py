@@ -43,16 +43,17 @@ def sign_up():
         password2 = request.form.get('password2')
         character = request.form.get('character-options')
 
+        # Set the player's stats based on their selection
         armor = 1
         speed = 1
         strength = 1
 
         if character == "character1":
-            armor = 5
+            armor = 2
         elif character == "character2":
-            speed = 5
+            speed = 2
         else:
-            strength = 5
+            strength = 2
 
         user = User.query.filter_by(email=email).first()
         

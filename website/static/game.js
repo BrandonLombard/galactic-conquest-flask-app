@@ -76,10 +76,12 @@ function addPlayer(character, canvas) {
 
         if (name == ' ' || name == 'f' || name == 'w' || name == 'arrowup') {
             canvas.append(laserImage);
-            levelLasers.push(laserImage);
             laserImage.style.transform = playerShip.style.transform;
             clearInterval(shootLaser);
+            laserImage.setAttribute("id", `laser${laserNum}`);
+            levelLasers.push(laserImage);
             var shootLaser = setInterval(moveLaser, 10, laserImage);
+            laserNum++;
         };
 
         if (name == 'a' || name == "arrowleft") {
@@ -141,11 +143,12 @@ function buildEnemy(enemyType, size=75) {
 
     // Detect if the enemy and character collide
     var characterImage = document.getElementById('character-ship');
-    setInterval(checkCollision, 100, enemyImage, characterImage);
+    var menuBackground = document.getElementById('menu-background');
+    var laser = document.querySelector('.no-select');
 
-    var lastElement = parseInt(levelLasers[levelLasers.length - 1]);
-    console.log('last element: ' + lastElement);
-    checkLaser = setInterval(checkLaserCollision, 100, enemyImage, levelLasers[lastElement]);
+    checkCharacterCollision = setInterval(checkCollision, 100, enemyImage, characterImage);
+    checkBackgroundCollision = setInterval(checkCollision, 100, enemyImage, menuBackground);
+    checkLaserCollision = setInterval(checkAllLasers, 100, enemyImage, levelLasers);
 
     
 }
@@ -284,11 +287,19 @@ function clearText(x) {
     planetName.style.visibility = "hidden";
 }
 
+// Checks all of the lasers on teh screen adn then determinees if that collides with the enemy
+function checkAllLasers(enemyImage, laserImage) {
+    for (var i = 0; i < laserImage.length; i++) {
+        checkCollision(enemyImage, laserImage[i])
+    }
+}
+
 // Detect when a player and enemy character collide
 function checkCollision(enemyImage, characterImage) {
     const rect1 = enemyImage.getBoundingClientRect();
     const rect2 = characterImage.getBoundingClientRect();
-  
+
+    
     // Check if the two elements intersect
     var collides = !(
       rect1.bottom < rect2.top ||
@@ -299,8 +310,32 @@ function checkCollision(enemyImage, characterImage) {
     if (collides) {
         var playerHealth = document.getElementById('healthbar');
         var playerGems = document.querySelector('#player-gems > div');
+        var playerXP = document.querySelector('#player-exp-points > div');
         var enemyImageSrc = enemyImage.src;
+        var characterImageSrc = characterImage.src;
+        
+        if (characterImage.id == "menu-background" && !(enemyImageSrc.includes('gem') || enemyImageSrc.includes('obstacle'))) {
+            enemyImage.remove();
+            playerHealth.value -= 15;
+            return;
+        }
+        
+        // Determine if the player hits an enemy with a laser
+        if (characterImageSrc.includes('laser')) {
+            characterImage.remove();
+            // If they shoot the gems, they break but no XP is awarded
+            if (!enemyImageSrc.includes('gem')) {
+                // Award XP for shooting enemies
+                var newPlayerXP = parseInt(playerXP.textContent) + 10;
+                playerXP.textContent = newPlayerXP;
+            }
+            // Remove enemy and return from the function
+            enemyImage.remove();
+            return;
+        }
 
+        // Determine which game element touches the player directly
+        // And increment the player's stats accordingly
         if (enemyImageSrc.includes('gem')) {
             var numGems = parseInt(playerGems.textContent);
             numGems += 50;
@@ -311,38 +346,14 @@ function checkCollision(enemyImage, characterImage) {
             playerHealth.value -= 25;
         } else if (enemyImageSrc.includes('obstacle')) {
             playerHealth.value -= 15;
-        } 
-        else {
-            playerHealth.value -= 5;
         }
-        enemyImage.remove()
+        else {
+            console.log('Uh oh');
+        };
+        enemyImage.remove();
         
     }
   }
-
-function checkLaserCollision(enemyImage, laserImage) {
-    const rect1 = enemyImage.getBoundingClientRect();
-    const rect2 = laserImage.getBoundingClientRect();
-    var playerExpPoints = document.querySelector('#player-exp-points > div');
-    var playerGems = document.querySelector('#player-gems > div');
-
-    // Check if the two elements intersect
-    var collides = !(
-      rect1.bottom < rect2.top ||
-      rect1.top > rect2.bottom ||
-      rect1.right < rect2.left ||
-      rect1.left > rect2.right
-    );
-
-    if (collides) {
-        var numExpPoints = parseInt(playerExpPoints.textContent);
-        numExpPoints += 50;
-        playerExpPoints.textContent = numExpPoints;
-        characterImage.remove();
-        laserImage.remove()
-        clearInterval(checkLaser);
-    }
-}
 
 // This updates the shop when the user interacts with it (i.e. clicks a '+' button)
 function updateShop(itemId, command, price, gems) {
