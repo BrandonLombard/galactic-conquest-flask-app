@@ -1,23 +1,6 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
 
 {% block content %}
-<!-- <h1 align="center">Notes</h1>
-<ul class="list-group list-group-flush" id="notes">
-    {% for note in user.notes %}
-        <li class="list-group-item">
-            {{ note.data }}
-            <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-                <span aria-hidden="'true">&times;</span>
-            </button>
-        </li>
-    {% endfor %}
-</ul>
-<form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <br>
-    <div align="center">
-        <button type="submit" class="btn btn-primary">Add Note</button>
-    </div> -->
     <div id="container">
         <!-- Left column -->
         <div class="left-column column-styling column-position">
@@ -29,23 +12,23 @@
                     </div>
                 </div>
                 <div id="rank"> 
-                {% if user.exp_points >= 1000 %}
+                {% if user.exp_points >= 1000000 %}
                     <img src="../static/images/game-assets/rank10.png" title="General" />
-                {% elif user.exp_points >= 900 %}
+                {% elif user.exp_points >= 100000 %}
                     <img src="../static/images/game-assets/rank9.png" title="Colonel" />
-                {% elif user.exp_points >= 800 %}
+                {% elif user.exp_points >= 55000 %}
                     <img src="../static/images/game-assets/rank8.png" title="Major" />
-                {% elif user.exp_points >= 700 %}
+                {% elif user.exp_points >= 25000 %}
                     <img src="../static/images/game-assets/rank7.png" title="Lieutenant" />
-                {% elif user.exp_points >= 600 %}
+                {% elif user.exp_points >= 12000 %}
                     <img src="../static/images/game-assets/rank6.png" title="Sergeant Major" />
-                {% elif user.exp_points >= 500 %}
+                {% elif user.exp_points >= 5000 %}
                     <img src="../static/images/game-assets/rank5.png" title="First Sergeant" />
-                {% elif user.exp_points >= 400 %}
+                {% elif user.exp_points >= 2500 %}
                     <img src="../static/images/game-assets/rank4.png" title="Staff Sergeant" />
-                {% elif user.exp_points >= 300 %}
+                {% elif user.exp_points >= 1000 %}
                     <img src="../static/images/game-assets/rank3.png" title="Sergeant" />
-                {% elif user.exp_points >= 200 %}
+                {% elif user.exp_points >= 400 %}
                     <img src="../static/images/game-assets/rank2.png" title="Corporal" />
                 {% else %}
                     <img src="../static/images/game-assets/rank1.png" title="Private" />
@@ -59,15 +42,17 @@
                     <img src="../static/images/game-assets/gems.png" class="user-icons" />
                     {{user.galactic_gems}}
                 </div>
-                <!-- {{user.planets_defeated}} -->
                 <div class="stats" title="Power">
-                    <img src="../static/images/game-assets/strength.png" class="user-icons" /> {{user.strength}}
+                    <img src="../static/images/game-assets/strength.png" class="user-icons" /> 
+                    <span id="user-strength">{{user.strength}}</span>
                 </div>
                 <div class="stats" title="Speed">
-                    <img src="../static/images/game-assets/speed.png" class="user-icons" /> {{user.speed}}
+                    <img src="../static/images/game-assets/speed.png" class="user-icons" /> 
+                    <span id="user-speed">{{user.speed}}</span>
                 </div>
                 <div class="stats" title="Armor">
-                    <img src="../static/images/game-assets/armor.png" class="user-icons" /> {{user.armor}} 
+                    <img src="../static/images/game-assets/armor.png" class="user-icons" /> 
+                    <span id="user-armor">{{user.armor}}</span> 
                 </div>
             </div>
             
@@ -100,6 +85,9 @@
                             {% set character = user.character %}
                             <div id="planet-name"></div>
                             <img src="../static/images/game-assets/planet{{i}}.png" class="planet unlocked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onclick="openGame({{i}}, '{{user.character}}');" onmouseover="displayText(this, {{i}})" onmouseout="clearText(this)">
+                        {% elif user.planets_defeated > i %}
+                            <div id="planet-name"></div>
+                            <img src="../static/images/game-assets/planet{{i}}.png" class="planet defeated" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onmouseover="displayText(this, {{i}})" onmouseout="clearText(this)">
                         {% else %}
                             <img src="../static/images/game-assets/planet{{i}}.png" class="planet locked" style="left: {{x_pos.value}}px; top: {{y_pos.value}}px;" onmouseover="displayText(this, {{i}}, true)" onmouseout="clearText(this)">
                         {% endif %}
@@ -130,8 +118,8 @@
                                 <div>Power</div>
                             </div>
                             <div class="shop-item-count">
-                                <button type="button" class="shop-button" onclick="updateShop('strength-number', 'add', 50, {{user.galactic_gems}});">+</button>
-                                <button type="button" class="shop-button" onclick="updateShop('strength-number', 'sub', 50, {{user.galactic_gems}})">-</button>
+                                <button type="button" class="shop-button" onclick="updateShop('strength-number', 'add', 100, {{user.galactic_gems}});">+</button>
+                                <button type="button" class="shop-button" onclick="updateShop('strength-number', 'sub', 100, {{user.galactic_gems}})">-</button>
                                 <input id="strength-number" name="strength" class="shop-form" value='0' type="number">
                             </div>
                         </div>
@@ -141,8 +129,8 @@
                                 <div>Speed</div>
                             </div>
                             <div class="shop-item-count">
-                                <button type="button" class="shop-button" onclick="updateShop('speed-number', 'add', 75, {{user.galactic_gems}});">+</button>
-                                <button type="button" class="shop-button" onclick="updateShop('speed-number', 'sub', 75, {{user.galactic_gems}})">-</button>
+                                <button type="button" class="shop-button" onclick="updateShop('speed-number', 'add', 100, {{user.galactic_gems}});">+</button>
+                                <button type="button" class="shop-button" onclick="updateShop('speed-number', 'sub', 100, {{user.galactic_gems}})">-</button>
                                 <input id="speed-number" name="speed" class="shop-form" value='0' type="number">
                             </div>
                         </div>
@@ -152,8 +140,8 @@
                                 <div>Armor</div>
                             </div>
                             <div class="shop-item-count">
-                                <button type="button" class="shop-button" onclick="updateShop('armor-number', 'add', 25, {{user.galactic_gems}});">+</button>
-                                <button type="button" class="shop-button" onclick="updateShop('armor-number', 'sub', 25, {{user.galactic_gems}})">-</button>
+                                <button type="button" class="shop-button" onclick="updateShop('armor-number', 'add', 100, {{user.galactic_gems}});">+</button>
+                                <button type="button" class="shop-button" onclick="updateShop('armor-number', 'sub', 100, {{user.galactic_gems}})">-</button>
                                 <input id="armor-number" name="armor" class="shop-form" type="number" value='0'>
                             </div>
                         </div>
@@ -210,7 +198,34 @@
                                 <div id="level-description"></div>
                             </div>
                             <!-- This start button begins the game -->
-                            <button id="start" onclick="buildLevel();">Start</button>
+                            <button id="start" class="form-button" onclick="buildLevel();">Start</button>
+                        </div>
+                        <!-- When the player wins, this section is displayed -->
+                        <div id="menu-end">
+                            <form method="POST">
+                                <h1 id="end-title"></h1>
+                                <p id="end-planet-name"></p>
+                                <div>
+                                    <input id="gems-earned" name="gems" class="shop-form" value='0' type="number">
+                                    <image src="../static/images/game-assets/gems.png" class="user-icons" /> Gems
+                                </div>
+                                <div>
+                                    <input id="xp-earned" name="xp" class="shop-form" value='0' type="number">
+                                    <image src="../static/images/game-assets/xp.png" class="user-icons" /> XP
+                                </div>
+                                <div>
+                                    <input id="planets-defeated" name="planets-defeated" class="shop-form" value='0' type="number">
+                                    <image src="../static/images/game-assets/planet.png" class="user-icons" /> A New Level
+                                </div>
+                                <button id="save-button" class="form-button" type="submit">Save Game</button>
+                                <img src="../static/images/graphical-assets/private-stronghold.png" class="side-character-image">
+                            </form>
+                        </div>
+                        <!-- If the player loses, this is displayed -->
+                        <div id="game-lose">
+                            <h1 id="lose-title">DEFEAT!</h1>
+                            <p>You have lost this battle!</p>
+                            <button type="button" class="form-button" onclick="window.location.reload();">Continue</button>
                         </div>
                     </div>
                 </div>

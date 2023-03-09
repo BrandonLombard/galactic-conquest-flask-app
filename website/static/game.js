@@ -74,14 +74,31 @@ function addPlayer(character, canvas) {
             };
         }
 
+        function delayLasers() {
+            if (canShoot == true) {
+                canShoot = false;
+            } else {
+                canShoot = true;
+            }
+            
+            
+        }
+
         if (name == ' ' || name == 'f' || name == 'w' || name == 'arrowup') {
-            canvas.append(laserImage);
-            laserImage.style.transform = playerShip.style.transform;
-            clearInterval(shootLaser);
-            laserImage.setAttribute("id", `laser${laserNum}`);
-            levelLasers.push(laserImage);
-            var shootLaser = setInterval(moveLaser, 10, laserImage);
-            laserNum++;
+            var delayNum = 1000 - (parseInt($('#user-speed').text()) * 10);
+            if (canShoot) {
+                canvas.append(laserImage);
+                laserImage.style.transform = playerShip.style.transform;
+                clearInterval(shootLaser);
+                laserImage.setAttribute("id", `laser${laserNum}`);
+                levelLasers.push(laserImage);
+                var shootLaser = setInterval(moveLaser, 10, laserImage);
+                laserNum++;
+                canShoot = false;
+                setTimeout(delayLasers, delayNum);
+            } 
+
+            
         };
 
         if (name == 'a' || name == "arrowleft") {
@@ -119,7 +136,7 @@ function startMenuData(planetNum) {
     title.textContent = `Battle of ${levelData[planetNum][0]}`;
     subtitle.textContent = `Level ${planetNum}`;
     character.innerHTML = `<img src='../static/images/game-assets/bot${planetNum}.png'>`;
-    description.innerHTML = `Lead a full assault on ${levelData[planetNum][0]} and defeat Commander ${levelData[planetNum][1]} and their fleet of Cosmic Empire ships. `;
+    description.innerHTML = `Lead a full assault on ${levelData[planetNum][0]} and defeat the evil Commander ${levelData[planetNum][1]} and their fleet of Cosmic Empire ships. `;
 }
 
 // Sets the enemy's x and y position and puts them on the screen
@@ -148,13 +165,11 @@ function buildEnemy(enemyType, size=75) {
 
     checkCharacterCollision = setInterval(checkCollision, 100, enemyImage, characterImage);
     checkBackgroundCollision = setInterval(checkCollision, 100, enemyImage, menuBackground);
-    checkLaserCollision = setInterval(checkAllLasers, 100, enemyImage, levelLasers);
-
+    checkLaserCollision = setInterval(checkAllLasers, 10, enemyImage, levelLasers);
     
 }
 
 function enemyShip(levelNum) {
-    console.log(`Added a ship at level ${levelNum}`);
     buildEnemy(`planet${levelNum}-ship`);
 }
 
@@ -167,7 +182,6 @@ function enemyBoss(levelNum) {
 }
 
 function enemyTurret(levelNum) {
-    console.log('Added a turret');
     buildEnemy(`turret`);
 }
 
@@ -222,11 +236,18 @@ function buildLevel() {
     var levelMenu = document.querySelector('.level-menu');
     levelMenu.style.visibility = 'hidden';
 
+    // Get the player's health stats and update their health in game accordingly
+    var playerHealthStats = parseInt($('#user-armor').text());
+    var healthBar = document.getElementById('healthbar');
+    var newHealth = parseInt(healthBar.value) + playerHealthStats;
+    healthBar.setAttribute("value", newHealth);
+    healthBar.setAttribute("max", newHealth);
+
     var subtitle = document.getElementById('level-subtitle').textContent;
     var planetNum = subtitle.replace("Level ", "");
     let levelNum = parseInt(planetNum);
 
-    console.log(levelNum);
+    console.log("Level #" + levelNum);
 
     // Create a new list with the levelData
     var numShips = levelData[levelNum][2];
@@ -236,7 +257,7 @@ function buildLevel() {
     var numBosses = levelData[levelNum][6];
     var numGems = levelData[levelNum][7];
 
-    var enemyObj = {
+    enemyObj = {
         'ships': numShips, 
         'bombers': numBombers, 
         'obstacles': numObstacles, 
@@ -249,6 +270,21 @@ function buildLevel() {
     var speed = 2 - (0.1 * levelNum);
     // Call the addEnemy() function on a timer a set amount of times
     playingGame = setInterval(addEnemy, speed * 1000, enemyObj, levelNum);
+    trackEnemiesTimer = setInterval(trackEnemies, 10, levelNum);
+}
+
+// Function that  determines how many enemies are still in the level
+function trackEnemies(levelNum) {
+    var numEnemies = $('.animate-down').length;
+    if (Object.keys(enemyObj).length <= 0 && numEnemies <= 0) {
+        var gems = parseInt($("#player-gems").text());
+        var xp = parseInt($("#player-exp-points").text());
+        $('#gems-earned').val(gems);
+        $('#xp-earned').val(xp);
+        $('#menu-end').css("visibility", "visible");
+        $('#end-title').text("Great job, Agent!");
+        $('#end-planet-name').text(`You've defeated Galaxion's fleet on ${levelData[levelNum][0]}, you've earned:`);
+    };
 }
 
 // Stops adding enemies to the screen
@@ -265,7 +301,7 @@ function displayText(planet, planetNum, locked=false) {
     var planetName = document.getElementById('planet-name');
     planetName.style.visibility = "visible";
     if (locked == true) {
-        planetName.innerHTML = `<img src="../static/images/game-assets/forbidden.png" width='20px'>${levelData[planetNum][0]}`;
+        planetName.innerHTML = `${levelData[planetNum][0]}`;
     } else {
         planetName.innerHTML = `${levelData[planetNum][0]}`;
 
@@ -287,10 +323,10 @@ function clearText(x) {
     planetName.style.visibility = "hidden";
 }
 
-// Checks all of the lasers on teh screen adn then determinees if that collides with the enemy
+// Checks all of the lasers on the screen and then determines if that collides with the enemy
 function checkAllLasers(enemyImage, laserImage) {
     for (var i = 0; i < laserImage.length; i++) {
-        checkCollision(enemyImage, laserImage[i])
+        var colliding = checkCollision(enemyImage, laserImage[i])
     }
 }
 
@@ -298,7 +334,6 @@ function checkAllLasers(enemyImage, laserImage) {
 function checkCollision(enemyImage, characterImage) {
     const rect1 = enemyImage.getBoundingClientRect();
     const rect2 = characterImage.getBoundingClientRect();
-
     
     // Check if the two elements intersect
     var collides = !(
@@ -314,11 +349,22 @@ function checkCollision(enemyImage, characterImage) {
         var enemyImageSrc = enemyImage.src;
         var characterImageSrc = characterImage.src;
         
+        // If the player's helath is less than or equal to zero, then stop playing
+        if (playerHealth.value <= 0) {
+            var gameOver = document.getElementById('game-lose');
+            gameOver.style.visibility = "visible";
+            clearInterval(playingGame);
+        } 
+
+
         if (characterImage.id == "menu-background" && !(enemyImageSrc.includes('gem') || enemyImageSrc.includes('obstacle'))) {
             enemyImage.remove();
             playerHealth.value -= 15;
             return;
-        }
+        } else if (characterImage.id == "menu-background" && (enemyImageSrc.includes('gem') || enemyImageSrc.includes('obstacle'))) {
+            enemyImage.remove();
+            return;
+        };
         
         // Determine if the player hits an enemy with a laser
         if (characterImageSrc.includes('laser')) {
@@ -326,7 +372,7 @@ function checkCollision(enemyImage, characterImage) {
             // If they shoot the gems, they break but no XP is awarded
             if (!enemyImageSrc.includes('gem')) {
                 // Award XP for shooting enemies
-                var newPlayerXP = parseInt(playerXP.textContent) + 10;
+                var newPlayerXP = parseInt(playerXP.textContent) + 1;
                 playerXP.textContent = newPlayerXP;
             }
             // Remove enemy and return from the function
@@ -346,9 +392,6 @@ function checkCollision(enemyImage, characterImage) {
             playerHealth.value -= 25;
         } else if (enemyImageSrc.includes('obstacle')) {
             playerHealth.value -= 15;
-        }
-        else {
-            console.log('Uh oh');
         };
         enemyImage.remove();
         
@@ -367,7 +410,6 @@ function updateShop(itemId, command, price, gems) {
 
     // Calculate the total cost of the player's selections
     var totalPriceCurrent = parseInt(totalPrice.value);
-    console.log(totalPriceCurrent)
 
 
     var currentGems = parseInt(totalPrice.value);
@@ -388,8 +430,4 @@ function updateShop(itemId, command, price, gems) {
         }
         
     }
-        
-    console.log("----" + itemNumber.value);
-
-    
 }

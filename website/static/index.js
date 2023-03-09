@@ -1,4 +1,4 @@
-// Deletes the note
+// Allows the user to purchase items when they click the 'purchase' button
 function completePurchase(noteId) {
     fetch('/complete-purchase', {
         method: 'POST',
@@ -7,6 +7,20 @@ function completePurchase(noteId) {
         window.location.href = "/";
     });
 }
+
+function updateGameStats() {
+    var gemsEarned = parseInt($('#gems-earned').text());
+    var xpEarned = parseInt($('#xp-earned').text());
+    var planetsDefeated = parseInt($('#planets-defeated').text());
+
+    fetch('/update-game', {
+        method: 'POST',
+        body: JSON.stringify({ gemsEarned: gemsEarned })
+    }).then((_res) => {
+        window.location.href = "/";
+    });
+}
+
 
 //  Displays the selected character on the sign up page
 function displayCharacter() {

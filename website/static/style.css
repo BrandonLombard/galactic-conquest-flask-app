@@ -129,12 +129,13 @@ img {
 
 .right-column {
     width: 600px;
+    min-width: 600px;
 }
 
 .round-white-box {
     background: #ede4f5;
     opacity: 90%; 
-    width: 75%;  /* 260px */
+    width: 75%;
     height: 90%;
     display: flex;
     justify-content: flex-start;
@@ -201,7 +202,7 @@ img {
     margin: 5px;
     padding: 10px;
     border-radius: 5px;
-    width: 100px;
+    min-width: 100px;
     color: white;
 }
 
@@ -253,6 +254,11 @@ img {
 
 .locked {
     filter: grayscale(1);
+}
+
+.locked:hover {
+    /* cursor: url(../static/images/game-assets/forbidden.png), auto; */
+    cursor: not-allowed;
 }
 
 .game-nav {
@@ -430,7 +436,7 @@ img {
     z-index: 10;
     left: 25px;
     top: 50px;
-    opacity: 50%;
+    opacity: 60%;
     color: black;
 }
 
@@ -440,27 +446,34 @@ img {
     margin-top: 10px;
 }
 
-.level-menu > button {
-    position: absolute;
-    padding: 25px 35px 25px 35px;
-    border: 1px solid black;
-    top: 300px;
-    left: 140px;
+.form-button {
+    width: 150px;
+    height: 75px;
+    align-self: center;
+    background: #30194d;
+    color: white;
+    margin-top: 15px;
+}
+
+.form-button:hover {
+    transition: 0.5s;
+    background: #30194d;
+    color: #FBB725;
     font-size: 25px;
 }
 
-.level-menu > button:hover {
-    left: 130px;
-    top: 290px;
-    font-size: 35px;
-    transition: 0.5s;
-}
+.level-menu > button {
+    position: absolute;
+    top: 300px;
+    left: 125px;
+} 
 
 #level-title {
     text-align: center;
     font-size: 25px;
     font-weight: bold;
     width: 100%;
+    margin-top: 15px;
 }
 
 #level-subtitle {
@@ -471,6 +484,7 @@ img {
 
 #level-description {
     width: 250px;
+    text-align: justify;
 }
 
 .help {
@@ -580,26 +594,154 @@ img {
     box-shadow: 5px 5px 15px black;
 }
 progress {
-    /* style rules */
-    /* -webkit-appearance: none; */
     height: 15px;
     width: 100px;
     margin-left: 5px;
-    /* background-color: green; */
-    /* border-radius: 15px; */
-    /* border: none; */
 }
 progress::-webkit-progress-bar {
-    /* style rules */
     background-color: green;
     border-radius: 15px;
-}
-progress::-webkit-progress-value {
-    /* style rules */
-
 }
 progress::-moz-progress-bar {
     /* style rules */
     background-color: green;
     border-radius: 15px;
+}
+
+#menu-end {
+    visibility: hidden;
+    position: absolute;
+    width: 405px;
+    height: 435px;
+    background-color: white;
+    z-index: 10;
+    left: 25px;
+    top: 50px;
+    opacity: 80%;
+    color: black;
+}
+
+#menu-end > form {
+    width: 100%;
+    background: transparent;
+    color: black;
+    border: none;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: none;
+}
+
+#menu-end > form > div {
+    margin-bottom: 15px;
+}
+
+#menu-end > form > div > input {
+    border: none;
+}
+
+.side-character-image {
+    position: absolute;
+    right: 10px;
+    width: 150px;
+    top: 140px;
+}
+
+.defeated {
+    cursor: none;
+}
+
+.defeated:hover {
+    cursor: default;
+}
+ 
+#version {
+    color: gray;
+    position: absolute;
+    right: 15px;
+}
+
+#version:hover {
+    background: none;
+}
+
+.about-section {
+    padding: 15px;
+    text-align: justify;
+}
+
+.about-section > h1 {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid #FBB725;
+    color: #FBB725;
+    background: #30194d;
+}
+
+.about-section > div {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    padding-top: 15px;
+} 
+
+.about-section > p > a {
+    color: purple;
+}
+
+.about-section > p > a:hover {
+    background: none;
+}
+
+
+.about-section > div > p {
+    background: white;
+    padding: 10px;
+    float: left;
+}
+
+.about-section > div > p > img {
+    float: left;
+    padding: 10px;
+}
+
+.about-section > hr {
+    background: white;
+}
+
+#coming-soon {
+    margin-top: -30px;
+}
+
+#game-lose {
+    visibility: hidden;
+    position: absolute;
+    width: 405px;
+    height: 435px;
+    background-color: white;
+    z-index: 10;
+    left: 25px;
+    top: 50px;
+    opacity: 80%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: url('../static/images/game-assets/defeat-bg.jpg');
+    background-size: cover;
+    padding: 15px;
+}
+
+#game-lose > button {
+    justify-self: flex-end;
+    margin-top: 215px;
+}
+
+#lose-title {
+    text-align: center;
+}
+
+.about-banner {
+    width: 100%;
 }

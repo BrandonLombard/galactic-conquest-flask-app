@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block title %}About{% endblock %}
+
+{% block content %}
+
+<div id="container">
+    <!-- Left column -->
+    <div class="left-column column-styling column-position">
+        <div class="round-white-box">
+            <div class="about-section">
+                <img src="../static/images/graphical-assets/private-stronghold-waving.png" class="game-character" style="margin-left: 25px;">
+                <p>This is a Flask Application made by <a href="https://www.brandonlombard.com/" target="_new" style="color: purple;">Brandon Lombard</a> as a portfolio item.</p>
+                
+            </div>
+            <div class="about-section">
+                Built with
+                <ul>
+                    <li>Python</li>
+                    <li>JavaScript</li>
+                    <li>jQuery</li>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>Jinja</li>
+                    <li>Flask</li>
+                    <li>Bootstrap</li>
+                    <li>PhotoShop</li>
+                    <li>Visual Studio Code</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="right-column column-styling column-position">
+        <div class="round-white-box increase-size" style="background: url('../static/images/bg-purple-space1.jpg'); background-size: cover; overflow-y: scroll;">
+            <div class="about-section">
+                <h1>Welcome to Galactic Conquest</h1>
+                <img src="../static/images/graphical-assets/space-battle1.jpg" class="about-banner">
+                <div>
+                    <p>
+                        <img src="../static/images/graphical-assets/galaxion-profile.png">
+                        The leader of the Cosmic Empire, Galaxion, has seized control of 
+                    12 planets within the Milky Way Galaxy and intends to continue his 
+                    conquest until he dominates the entire galaxy! Fortunately, you 
+                    have been personally selected by the Galactic Federation to reclaim 
+                    these captured worlds and protect the Milky Way from Galaxion's 
+                    grip.
+                    
+                </p>
+                
+                </div>
+            </div>
+            <!-- Section -->
+            <div class="about-section" id="coming-soon">
+                <h1>Coming Soon</h1>
+                <div style="background: white; margin-top: 15px;">
+                    <ul>
+                        <li>Enemy ships can shoot lasers</li>
+                        <li>Enemies have different levels of health, which means no one-hit KO's</li>
+                        <li>More lively animations for characters, enemies, and obstacles</li>
+                        <li>Updated designs for multiple elements, including the planet backgrounds, enemies, obstacles, etc.</li>
+                        <li>A tutorial in level 0 for new players</li>
+                        <li>Improved player movement </li>
+                        <li>Sound effects, such as lasers and enemy character voices</li>
+                        <li>New items in the shop, such as a second ship or lasers that shoot through multiplee ships</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -10,46 +10,49 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     if request.method == 'POST':
-        # This updates the players stats if they purchase something at the shop
-        form_strength = int(request.form.get("strength"))
-        form_speed = int(request.form.get("speed"))
-        form_armor = int(request.form.get("armor"))
-        form_price = int(request.form.get("price"))
-
-        if current_user.galactic_gems >= form_price:
-            current_user.strength = current_user.strength + form_strength
-            current_user.speed = current_user.speed + form_speed
-            current_user.armor = current_user.armor + form_armor
-            current_user.galactic_gems = current_user.galactic_gems - form_price
-            flash('Thank you for your purchase!', category='success')
+        # This updates the player's game stats when they win a level
+        form_gems = request.form.get("gems")
+        
+        # Determine if form_gems is not a NoneType
+        # And if so, Update the player's progress
+        if form_gems is not None:
+            form_xp = int(request.form.get("xp"))
+            form_gems = int(request.form.get("gems"))
+            current_user.galactic_gems = current_user.galactic_gems + form_gems
+            current_user.exp_points = current_user.exp_points + form_xp
+            current_user.planets_defeated = current_user.planets_defeated + 1
+            flash('Your progress has been successfully saved!', category='success')
         else:
-            flash('Unable to purchase these items due to insufficient funds.', category='error')
+            # This updates the players stats if they purchase something at the shop
+            form_strength = int(request.form.get("strength"))
+            form_speed = int(request.form.get("speed"))
+            form_armor = int(request.form.get("armor"))
+            form_price = int(request.form.get("price"))
+            # Determine the total price
+            total = (form_strength + form_speed + form_armor) * 100
+
+            # Make sure the player can't purchase the item unless their gem count is above the total cost
+            if current_user.galactic_gems >= total:
+                current_user.strength = current_user.strength + form_strength
+                current_user.speed = current_user.speed + form_speed
+                current_user.armor = current_user.armor + form_armor
+                current_user.galactic_gems = current_user.galactic_gems - form_price
+                flash('Thank you for your purchase!', category='success')
+            else:
+                flash('Unable to purchase these items due to insufficient funds.', category='error')
         db.session.commit()
         
+    return render_template("home.html", user=current_user)
 
-    # elif request.method == 'GET':
-    #     user_stats = json.loads(request.data)
-    #     planets_defeated = user_stats['planets_defeated']
+@views.route('/about', methods=['GET'])
+def about():
+    return render_template("about.html", user=current_user)
 
-        # if len(note) < 1:
-        #     flash('Note is too short!', category='error')
-        # else:
-        #     new_note = Note(data=note, user_id=current_user.id)
-        #     db.session.add(new_note)
-        #     db.session.commit()
-        #     flash('Note added!', category='success')
-
-    return render_template("home.html", user=current_user)  # , stats=user_stats
-
-@views.route('/complete-purchase', methods=['POST'])
-def completePurchase():
+@views.route('/update-game', methods=['POST'])
+def update_game():
     note = json.loads(request.data)  # this function expects a JSON from the INDEX.js file 
     noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
+    noteId = note['noteId']
+    note = User.query.get(noteId)
     
-    return jsonify({})
 

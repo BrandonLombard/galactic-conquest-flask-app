@@ -11,7 +11,7 @@ const startingCharacterData = {
 // Level Num : [name of planet, name of commander, number of ships, number of bombers, number of obstacles, number of turrets, number of bosses, Number of gems]
 const levelData = {
     0: ['Helix Prime', 'Quantum Quasar', 10, 0, 5, 0, 1, 5],
-    1: ['Frozen hold', 'Nebula Trooper', 15, 0, 10, 5, 1, 6],
+    1: ['Frozenhold', 'Nebula Trooper', 15, 0, 10, 5, 1, 6],
     2: ['Pegasus Delta', 'Shadow Titan', 20, 5, 15, 5, 1, 7],
     3: ['Solaria', 'Cosmic Circuit', 25, 10, 20, 5, 1, 8],
     4: ['Draco Gamma', 'Necron', 30, 20, 20, 10, 1, 9],
@@ -27,4 +27,5 @@ const levelData = {
 // Stores each enemy in this array while the game is running to keep track of them
 var levelLasers = [];
 var laserNum = 0;
-var enemyImages = [];
+var enemyObj = [];
+var canShoot = true;
