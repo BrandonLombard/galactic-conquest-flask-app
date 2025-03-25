@@ -70,7 +70,7 @@ def sign_up():
             flash('Password must be at least 7 characters.', category='error')
         else:
             # Add the user to the database
-            new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='sha256'), character=character, exp_points=0, galactic_gems=100, planets_defeated=0, strength=strength, speed=speed, armor=armor)
+            new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='pbkdf2:sha256'), character=character, exp_points=0, galactic_gems=100, planets_defeated=0, strength=strength, speed=speed, armor=armor)
 
             db.session.add(new_user)
 
